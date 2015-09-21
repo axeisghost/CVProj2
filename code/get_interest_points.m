@@ -75,7 +75,9 @@ for knd = 1 : channels
                 temp = curr(jnd);
             end
         end
-        trylist = [trylist temp];
+        if ~any(trylist == temp)    
+            trylist = [trylist temp];
+        end
     end
 end
 y = ceil(trylist./height);
@@ -87,9 +89,9 @@ y(delMask) = [];
 for ind = 1 : size(x,2)
     mypoints(x(ind), y(ind)) = 1;
 end
-image_pts(:,:,1) = image(:,:,1) + mypoints;
-image_pts(:,:,2) = image(:,:,2) + mypoints;
-image_pts(:,:,3) = image(:,:,3) + mypoints;
-imshow(image_pts);
+% image_pts(:,:,1) = image(:,:,1) + mypoints;
+% image_pts(:,:,2) = image(:,:,2) + mypoints;
+% image_pts(:,:,3) = image(:,:,3) + mypoints;
+% imshow(image_pts);
 end
 
