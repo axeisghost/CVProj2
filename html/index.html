@@ -153,6 +153,12 @@ td img {
 <!-- <p> 	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> -->
 
 <div style="clear:both">
+<div style="float: left; padding: 20px">
+<img src="fp1_ND.jpg" />
+<p style="font-size: 14px">Interested points of Notre Dame Image Pairs (I)</p>
+<img src="fp2_ND.jpg" />
+<p style="font-size: 14px">Interested points of Notre Dame Image Pairs (II)</p>
+</div>
 <h3>Choosing interested points</h3>
 
 <p> 	Harris Corner Dictector was used to choose interested points. The idea to calculate the cornerness of a certain pixel by using second moment matrix. However, it is not possible to process all the corners. To filter out the interested points, the local maximum of cornerness was calculated to reduce the possible corner. Two methods were tried to accomplish the non-maxima suppresion of the cornerness. 
@@ -165,8 +171,7 @@ The first one is using sliding window to restrict the local region and to find t
 <p> 	In here, the second method was choosen as the method used in pipeline. The sliding window method will include more unnecessary corner in some flat region. However, the connected components method will only pick the point from high cornerness region, which is more reasonable and fast. More efficient interested points make the calculation of features more efficient too. </p>
 
 
-
-
+<div style="clear:both">
 
 <h3>Extracting the feature of each interested points</h3>
 
@@ -174,11 +179,36 @@ The first one is using sliding window to restrict the local region and to find t
 
 <h3>Matching the insterested points according to their features</h3>
 
-<p> 	The matching alrogithm is to calculate the Eulicdean distance between the features of each interested point pair, and the least distance pair were picked as matching pair. To rank the matching, the confidence of each match was calculated. The Nearest Distance ratio test was used to </p>
+<p> 	The matching alrogithm is to calculate the Eulicdean distance between the features of each interested point pair, and the least distance pair were picked as matching pair. To rank the matching, the confidence of each match was calculated. The Nearest Distance ratio test was used to evaluate the confidence of matches. The smaller the ratio, the higher confidence of the points.</p>
 
-</code></pre>
 
-<h3>Results in a table</h3>
+<h3>Decision & Tuning</h3>
+<p> 	The tuning of the parameters was all finished with Norte Dame images pair. In the first hand result, the first 100 confident points, the good match rate is not satisfied (72 good match out of 100 match pair). but there are acutally 346 good match pairs points in all the match. Therefore, it is reasonable to improve the evaluation of confidence. Therefore, the third closet point was also included. The ratio was calculated as 
+2 x least distance / (second least distance + third least distance). After the modification, the good match rate of first 100 confident points raised from 72% to 80%</p>
+
+<p> 	The algorithm at first can only process grayscale images. The total amount of interested points was limited because it only found points in one layer. At first, the thershold of connect components method was lower to include more point. However, the points we received from this modification did not acutally include useful features. To increase the amount of interested points, the algorithm was modified to calculate colored version of image. All the interested points in three layers of image are all included. Also, in the features extraction, the gradients of all three layers are all included. The calculation was longer but the the match rate increased from 80% to 91%. </p>
+
+<h3>Result</h3>
+<div style="float: center; padding: 20px">
+<img src="NotreDame_eval_color.jpg" />
+<center><p style="font-size: 14px">Match pairs of Norte Dame images pair</p></center>
+</div>
+<p> The first 100 match pairs was evaluated for the Norte Dame images pair. There are 91 good matches out of 100 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
+
+<div style="float: left; padding: 20px">
+<img src="Mount_RushMore_eval_color_200.jpg" />
+<center><p style="font-size: 14px">Match pairs of Mount Rushmore images pair</p></center>
+</div>
+<p> The first 200 match pairs was evaluated for the Mount Rushmore images pair. There are 185 good matches out of 200 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
+
+<div style="float: left; padding: 20px">
+<img src="eval_color_EpiscopalGaudi.jpg" />
+<center><p style="font-size: 14px">Match pairs of Episcopal Gaudi images pair</p></center>
+</div>
+<p> The first 100 match pairs was evaluated for the Episcopal Gaudi images pair. However, only 16 good matches out of 100 matches. This image pair is more challenging to match for several reasons. First, the wall of Episcopal Gaudi naturally contains a lot of edges and corner. Moreover, their features will be close in SIFT vectors and make the match much harder. Also the different size of two picture will make some corners harder to match. Scaling will make some corners becomes edges. Also, the rotation of Episcopal Gaudi makes the features matching harder with SIFT vectors. Some advanced algorithm can make the interested point fit the scaling and fix the rotation in SIFT vectors but they are not included here.</p>
+
+
+<!-- <h3>Results in a table</h3>
 
 <table border=1>
 <tr>
@@ -203,6 +233,6 @@ The first one is using sliding window to restrict the local region and to find t
 
 <div style="clear:both" >
 <p> 	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-</div>
+</div> -->
 </body>
 </html>

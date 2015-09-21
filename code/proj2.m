@@ -27,14 +27,14 @@ close all
 % eval_file = '../data/Notre Dame/921919841_a30df938f2_o_to_4191453057_c86028ce1f_o.mat';
 
 %This pair is relatively easy
-% image1 = imread('../data/Mount Rushmore/9021235130_7c2acd9554_o.jpg');
-% image2 = imread('../data/Mount Rushmore/9318872612_a255c874fb_o.jpg');
-% eval_file = '../data/Mount Rushmore/9021235130_7c2acd9554_o_to_9318872612_a255c874fb_o.mat';
+image1 = imread('../data/Mount Rushmore/9021235130_7c2acd9554_o.jpg');
+image2 = imread('../data/Mount Rushmore/9318872612_a255c874fb_o.jpg');
+eval_file = '../data/Mount Rushmore/9021235130_7c2acd9554_o_to_9318872612_a255c874fb_o.mat';
 
 %This pair is relatively difficult
-image1 = imread('../data/Episcopal Gaudi/4386465943_8cf9776378_o.jpg');
-image2 = imread('../data/Episcopal Gaudi/3743214471_1b5bbfda98_o.jpg');
-eval_file = '../data/Episcopal Gaudi/4386465943_8cf9776378_o_to_3743214471_1b5bbfda98_o.mat';
+% image1 = imread('../data/Episcopal Gaudi/4386465943_8cf9776378_o.jpg');
+% image2 = imread('../data/Episcopal Gaudi/3743214471_1b5bbfda98_o.jpg');
+% eval_file = '../data/Episcopal Gaudi/4386465943_8cf9776378_o_to_3743214471_1b5bbfda98_o.mat';
 
 image1 = single(image1)/255;
 image2 = single(image2)/255;
@@ -56,7 +56,7 @@ feature_width = 16; %width and height of each local feature, in pixels.
 %% Find distinctive points in each image. Szeliski 4.1.1
 % !!! You will need to implement get_interest_points. !!!
 [x1, y1] = get_interest_points(image1, feature_width);
-[x2, y2] = get_interest_points(image2_bw, feature_width);
+[x2, y2] = get_interest_points(image2, feature_width);
 
 %% Create feature vectors at each interest point. Szeliski 4.1.2
 % !!! You will need to implement get_features. !!!
