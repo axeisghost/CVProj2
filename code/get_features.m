@@ -55,19 +55,22 @@ function [features] = get_features(image, x, y, feature_width)
 % Placeholder that you can delete. Empty features.
 features = zeros(size(x,2), 128);
 directions = 0: pi/4 : 7*pi/4;
+DandG = fspecial('gaussian',[1 9],3);
+graX = imfilter(image, DandG);
+graY = imfilter(image, DandG');
+wholeDir = atan2(graY, graX);
+magnitude = sqrt(graX .* graX + graY .* graY);
 for ind = 1 : size(x,2)
     for knd = 1 : size(image,3)
-        extractor = image(ceil(x(ind) - (feature_width / 2)) : ceil(x(ind) + (feature_width / 2 - 1)), ceil(y(ind) - feature_width / 2) : ceil(y(ind) + feature_width / 2 - 1),knd);
-        [graX,graY] = gradient(im2double(extractor));
-        localDir = atan2(graY, graX);
-        graX = imfilter(graX, fspecial('gauss', [5 5], 1), 'symmetric');
-        graY = imfilter(graY, fspecial('gauss', [5 5], 1), 'symmetric');
-        magnitude = sqrt(graX .* graX + graY .* graY);
-        magnitude = magnitude .* fspecial('gauss', [feature_width, feature_width], feature_width / 2);
-        for iind = 1 : size(graX, 1)
-            for jjnd = 1 : size(graX, 2)
+        localM = magnitude(ceil(x(ind) - (feature_width / 2)) : ceil(x(ind) + (feature_width / 2 - 1)), ceil(y(ind) - feature_width / 2) : ceil(y(ind) + feature_width / 2 - 1),knd);
+        localDir = wholeDir(ceil(x(ind) - (feature_width / 2)) : ceil(x(ind) + (feature_width / 2 - 1)), ceil(y(ind) - feature_width / 2) : ceil(y(ind) + feature_width / 2 - 1),knd);
+%         graX = imfilter(graX, fspecial('gauss', [5 5], 1), 'symmetric');
+%         graY = imfilter(graY, fspecial('gauss', [5 5], 1), 'symmetric');
+%         magnitude = magnitude .* fspecial('gauss', [feature_width, feature_width], feature_width / 2);
+        for iind = 1 : size(localM, 1)
+            for jjnd = 1 : size(localM, 2)
                 for kknd = 1 : 8
-                    features(ind, ((ceil(iind / (feature_width / 4)) - 1)  * 4 + (ceil(jjnd / (feature_width / 4)) - 1)) * 8 + kknd) = features(ind, ((ceil(iind / (feature_width / 4)) - 1) * 4 + (ceil(jjnd / (feature_width / 4)) - 1)) * 8 + kknd) + magnitude(iind, jjnd) .* cos(localDir(iind,jjnd) - directions(kknd));
+                        features(ind, ((ceil(iind / (feature_width / 4)) - 1) + (ceil(jjnd / (feature_width / 4)) - 1)* 4) * 8 + kknd) = features(ind, ((ceil(iind / (feature_width / 4)) - 1) + (ceil(jjnd / (feature_width / 4)) - 1)* 4) * 8 + kknd) + localM(iind, jjnd) .* cos(localDir(iind,jjnd) - directions(kknd));
                 end
 %                 if (abs(graX(iind, jjnd)) > abs(graY(iind, jjnd)))
 %                     if (graX(iind, jjnd) > 0 && graY(iind, jjnd) > 0)

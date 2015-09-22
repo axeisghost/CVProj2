@@ -56,13 +56,13 @@ feature_width = 16; %width and height of each local feature, in pixels.
 
 %% Find distinctive points in each image. Szeliski 4.1.1
 % !!! You will need to implement get_interest_points. !!!
-[x1, y1] = get_interest_points(image1_bw, feature_width);
-[x2, y2] = get_interest_points(image2_bw, feature_width);
+[x1, y1] = get_interest_points(image1, feature_width);
+[x2, y2] = get_interest_points(image2, feature_width);
 
 %% Create feature vectors at each interest point. Szeliski 4.1.2
 % !!! You will need to implement get_features. !!!
-[image1_features] = get_features(image1_bw, x1, y1, feature_width);
-[image2_features] = get_features(image2_bw, x2, y2, feature_width);
+[image1_features] = get_features(image1, x1, y1, feature_width);
+[image2_features] = get_features(image2, x2, y2, feature_width);
 
 
 %% Match features. Szeliski 4.1.3
