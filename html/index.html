@@ -183,23 +183,23 @@ The first one is using sliding window to restrict the local region and to find t
 
 
 <h3>Decision & Tuning</h3>
-<p> 	The tuning of the parameters was all finished with Norte Dame images pair. In the first hand result, the first 100 confident points, the good match rate is not satisfied (72 good match out of 100 match pair). but there are acutally 346 good match pairs points in all the match. Therefore, it is reasonable to improve the evaluation of confidence. Therefore, the third closet point was also included. The ratio was calculated as 
-2 x least distance / (second least distance + third least distance). After the modification, the good match rate of first 100 confident points raised from 72% to 80%</p>
+<p> 	The tuning of the parameters was all finished with Norte Dame images pair. In the first hand result, the first 100 confident points, the good match rate is not satisfied (66 good match out of 100 match pair). but there are acutally 346 good match pairs points in all the match. Therefore, it is reasonable to improve the evaluation of confidence. Therefore, the third closet point was also included. The ratio was calculated as 
+2 x least distance / (second least distance + third least distance). After the modification, the good match rate of first 100 confident points raised from 66% to 72%</p>
 
-<p> 	The algorithm at first can only process grayscale images. The total amount of interested points was limited because it only found points in one layer. At first, the thershold of connect components method was lower to include more point. However, the points we received from this modification did not acutally include useful features. To increase the amount of interested points, the algorithm was modified to calculate colored version of image. All the interested points in three layers of image are all included. Also, in the features extraction, the gradients of all three layers are all included. The calculation was longer but the the match rate increased from 80% to 91%. </p>
+<p> 	The algorithm at first can only process grayscale images. The total amount of interested points was limited because it only found points in one layer. At first, the thershold of connect components method was lower to include more point. However, the points we received from this modification did not acutally include useful features. To increase the amount of interested points, the algorithm was modified to calculate colored version of image. All the interested points in three layers of image are all included. Also, in the features extraction, the gradients of all three layers are all included. The calculation was longer but the the match rate increased from 72% to 80%. </p>
 
 <h3>Result</h3>
 <div style="float: center; padding: 20px">
 <img src="NotreDame_eval_color.jpg" />
 <center><p style="font-size: 14px">Match pairs of Norte Dame images pair</p></center>
 </div>
-<p> The first 100 match pairs was evaluated for the Norte Dame images pair. There are 91 good matches out of 100 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
+<p> The first 100 match pairs was evaluated for the Norte Dame images pair. There are 80 good matches out of 100 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
 
 <div style="float: left; padding: 20px">
 <img src="Mount_RushMore_eval_color_200.jpg" />
 <center><p style="font-size: 14px">Match pairs of Mount Rushmore images pair</p></center>
 </div>
-<p> The first 200 match pairs was evaluated for the Mount Rushmore images pair. There are 185 good matches out of 200 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
+<p> The first 100 match pairs was evaluated for the Mount Rushmore images pair. There are 92 good matches out of 100 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
 
 <div style="float: left; padding: 20px">
 <img src="eval_color_EpiscopalGaudi.jpg" />
