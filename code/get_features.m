@@ -53,16 +53,23 @@ function [features] = get_features(image, x, y, feature_width)
 % feature vector to some power that is less than one.
 
 % Placeholder that you can delete. Empty features.
-% features = zeros(size(x,1), 128);
-features = cell(1, size(x,2));
+features = zeros(size(x,2), 128);
+tempfeatures = cell(1, size(x,2));
+dg = fspecial('gauss', feature_width, 1);
+[dgx, dgy] = gradient(dg);
+wholegraX = imfilter(image, dgx);
+wholegraY = imfilter(image, dgy);
+blurer = fspecial('gauss', feature_width, feature_width / 2);
 for ind = 1 : size(x,2)
-    features{ind} = cell(4);
+    tempfeatures{ind} = cell(4);
     for jnd = 1 : 16
-        features{ind}{jnd} = zeros(1,8);
+        tempfeatures{ind}{jnd} = zeros(1,8);
     end
     for knd = 1 : size(image,3)
-        extractor = image(ceil(x(ind) - (feature_width / 2)) : ceil(x(ind) + (feature_width / 2 - 1)), ceil(y(ind) - feature_width / 2) : ceil(y(ind) + feature_width / 2 - 1),knd);
-        [graX,graY] = gradient(im2double(extractor));
+        graX = wholegraX(ceil(x(ind) - (feature_width / 2)) : ceil(x(ind) + (feature_width / 2 - 1)), ceil(y(ind) - feature_width / 2) : ceil(y(ind) + feature_width / 2 - 1),knd);
+        graY = wholegraY(ceil(x(ind) - (feature_width / 2)) : ceil(x(ind) + (feature_width / 2 - 1)), ceil(y(ind) - feature_width / 2) : ceil(y(ind) + feature_width / 2 - 1),knd);
+        graX = graX .* blurer;
+        graY = graY .* blurer;
         setupbins = [0 0];
         for iind = 1 : size(graX, 1)
             for jjnd = 1 : size(graX, 2)
@@ -111,29 +118,26 @@ for ind = 1 : size(x,2)
                         setupbins = [3];
                     end
                 end
-                features{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins) = features{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
-                if (ceil(iind / 4) - 1 > 0)
-                    features{ind}{ceil(iind / 4 - 1), ceil(jjnd / 4)}(setupbins) = features{ind}{ceil(iind / 4 - 1), ceil(jjnd / 4)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
-                end
-                if (ceil(iind / 4) + 1 < 5)
-                    features{ind}{ceil(iind / 4 + 1), ceil(jjnd / 4)}(setupbins) = features{ind}{ceil(iind / 4 + 1), ceil(jjnd / 4)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
-                end
-                if (ceil(jjnd / 4) + 1 < 5)
-                    features{ind}{ceil(iind / 4), ceil(jjnd / 4) + 1}(setupbins) = features{ind}{ceil(iind / 4), ceil(jjnd / 4) + 1}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
-                end
-                if (ceil(jjnd / 4) - 1 > 0)
-                    features{ind}{ceil(iind / 4), ceil(jjnd / 4 - 1)}(setupbins) = features{ind}{ceil(iind / 4), ceil(jjnd / 4 - 1)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
-                end
+                tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins) = tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+%                 if (ceil(iind / 4) - 1 > 0)
+%                     tempfeatures{ind}{ceil(iind / 4 - 1), ceil(jjnd / 4)}(setupbins) = tempfeatures{ind}{ceil(iind / 4 - 1), ceil(jjnd / 4)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+%                 end
+%                 if (ceil(iind / 4) + 1 < 5)
+%                     tempfeatures{ind}{ceil(iind / 4 + 1), ceil(jjnd / 4)}(setupbins) = tempfeatures{ind}{ceil(iind / 4 + 1), ceil(jjnd / 4)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+%                 end
+%                 if (ceil(jjnd / 4) + 1 < 5)
+%                     tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4) + 1}(setupbins) = tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4) + 1}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+%                 end
+%                 if (ceil(jjnd / 4) - 1 > 0)
+%                     tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4 - 1)}(setupbins) = tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4 - 1)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+%                 end
             end
         end
     end
-    normsum = 0;
-    for jnd = 1 : 16
-        normsum = normsum + sum(features{ind}{jnd});
+    for und = 1 : 16
+        features(ind, (und - 1) * 8 + 1 : und * 8) = tempfeatures{ind}{und};
     end
-    for jnd = 1 : 16
-        features{ind}{jnd} = features{ind}{jnd} ./ normsum;
-    end
+    features(ind, :) = features(ind, :) .* (1 / norm(features(ind, :)));
 end
 
 

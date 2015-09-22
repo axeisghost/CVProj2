@@ -177,23 +177,23 @@ The first one is using sliding window to restrict the local region and to find t
 
 <p> 	The features interested points were extracted as a discriptor of the pixels around interested point. Each discriptor has 4 x 4 cell to roughly indicate the spatial feature of pxiels. Each cell will store an 8 dimension histogram that describes the direction of the gradient on each pixel. To simplify the process. The magnitude of the gradient was added to the nearest 2 directions of four nearest cells (in terms of space). Therefore, each gradient of the pixel has contribution to both difference in terms of space and color. </p>
 
-<h3>Matching the insterested points according to their features</h3>
+<h3>Matching the interested points according to their features</h3>
 
 <p> 	The matching alrogithm is to calculate the Eulicdean distance between the features of each interested point pair, and the least distance pair were picked as matching pair. To rank the matching, the confidence of each match was calculated. The Nearest Distance ratio test was used to evaluate the confidence of matches. The smaller the ratio, the higher confidence of the points.</p>
 
 
 <h3>Decision & Tuning</h3>
-<p> 	The tuning of the parameters was all finished with Norte Dame images pair. In the first hand result, the first 100 confident points, the good match rate is not satisfied (66 good match out of 100 match pair). but there are acutally 346 good match pairs points in all the match. Therefore, it is reasonable to improve the evaluation of confidence. Therefore, the third closet point was also included. The ratio was calculated as 
-2 x least distance / (second least distance + third least distance). After the modification, the good match rate of first 100 confident points raised from 66% to 72%</p>
+<p> 	The tuning of the parameters was all finished with Norte Dame images pair. In the first hand result, the first 100 confident points, the good match rate is not satisfied (72 good match out of 100 match pair). but there are acutally 346 good match pairs points in all the match. Therefore, it is reasonable to improve the evaluation of confidence. Therefore, the third closet point was also included. The ratio was calculated as 
+2 x least distance / (second least distance + third least distance). After the modification, the good match rate of first 100 confident points raised from 72% to 77%</p>
 
-<p> 	The algorithm at first can only process grayscale images. The total amount of interested points was limited because it only found points in one layer. At first, the thershold of connect components method was lower to include more point. However, the points we received from this modification did not acutally include useful features. To increase the amount of interested points, the algorithm was modified to calculate colored version of image. All the interested points in three layers of image are all included. Also, in the features extraction, the gradients of all three layers are all included. The calculation was longer but the the match rate increased from 72% to 80%. </p>
+<p> 	The algorithm at first can only process grayscale images. The total amount of interested points was limited because it only found points in one layer. At first, the thershold of connect components method was lower to include more point. However, the points we received from this modification did not acutally include useful features. To increase the amount of interested points, the algorithm was modified to calculate colored version of image. All the interested points in three layers of image are all included. Also, in the features extraction, the gradients of all three layers are all included. The calculation was longer but the the match rate increased from 77% to 83%. </p>
 
 <h3>Result</h3>
 <div style="float: center; padding: 20px">
 <img src="NotreDame_eval_color.jpg" />
 <center><p style="font-size: 14px">Match pairs of Norte Dame images pair</p></center>
 </div>
-<p> The first 100 match pairs was evaluated for the Norte Dame images pair. There are 80 good matches out of 100 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
+<p> The first 100 match pairs was evaluated for the Norte Dame images pair. There are 83 good matches out of 100 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
 
 <div style="float: left; padding: 20px">
 <img src="Mount_RushMore_eval_color_200.jpg" />

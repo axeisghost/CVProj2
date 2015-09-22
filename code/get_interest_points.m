@@ -38,12 +38,12 @@ function [x, y, confidence, scale, orientation] = get_interest_points(image, fea
 
 % Placeholder that you can delete. 20 random points
 alpha = 0.06;
-thershold = 0.0000005;
+thershold = 0.0000001;
 % x = ceil(rand(20,1) * size(image,2));
 % y = ceil(rand(20,1) * size(image,1));
 % image = imgaussfilt(image, 1);
-gaussianD = fspecial('gauss', [5, 5], 1);
-lgaussianD = fspecial('gauss', [7, 7], 1);
+gaussianD = fspecial('gauss', [6, 6], 1);
+lgaussianD = fspecial('gauss', [8, 8], 1);
 [gaussianDx, gaussianDy]  = gradient(gaussianD);
 [height, width, channels] = size(image);
 Ix = zeros(height, width, channels);
@@ -75,7 +75,9 @@ for knd = 1 : channels
                 temp = curr(jnd);
             end
         end
-        trylist = [trylist temp];
+        if ~any(trylist == temp)
+            trylist = [trylist temp];
+        end
     end
 end
 y = ceil(trylist./height);
@@ -87,9 +89,9 @@ y(delMask) = [];
 for ind = 1 : size(x,2)
     mypoints(x(ind), y(ind)) = 1;
 end
-image_pts(:,:,1) = image(:,:,1) + mypoints;
-image_pts(:,:,2) = image(:,:,2) + mypoints;
-image_pts(:,:,3) = image(:,:,3) + mypoints;
-imshow(image_pts);
+% image_pts(:,:,1) = image(:,:,1) + mypoints;
+% image_pts(:,:,2) = image(:,:,2) + mypoints;
+% image_pts(:,:,3) = image(:,:,3) + mypoints;
+% imshow(image_pts);
 end
 
