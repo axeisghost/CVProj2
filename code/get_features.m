@@ -63,8 +63,9 @@ for ind = 1 : size(x,2)
     for knd = 1 : size(image,3)
         extractor = image(ceil(x(ind) - (feature_width / 2)) : ceil(x(ind) + (feature_width / 2 - 1)), ceil(y(ind) - feature_width / 2) : ceil(y(ind) + feature_width / 2 - 1),knd);
         [graX,graY] = gradient(im2double(extractor));
-%       graX = imfilter(graX, fspecial('gauss', [5 5], 1));
-%       graY = imfilter(graY, fspecial('gauss', [5 5], 1));
+%         graX = imfilter(graX, fspecial('gauss', [5 5], 1), 'symmetric');
+%         graY = imfilter(graY, fspecial('gauss', [5 5], 1), 'symmetric');
+        magnitude = sqrt(graX .* graX + graY .* graY);
         setupbins = cell(feature_width);
         for iind = 1 : size(graX, 1)
             for jjnd = 1 : size(graX, 2)
@@ -116,13 +117,13 @@ for ind = 1 : size(x,2)
             end
         end
 %         graX = imfilter(graX, fspecial('gauss', [5 5], 1));
-%         graY = imfilter(graY, fspecial('gauss', [5 5], 1));
-        graX = graX .* fspecial('gauss', [feature_width, feature_width], 1);
-        graY = graY .* fspecial('gauss', [feature_width, feature_width], 1);
+%         magnitude = imfilter(magnitude, fspecial('gauss', [5 5], 1), 'symmetric');
+%         graX = graX .* fspecial('gauss', [feature_width, feature_width], 1);
+%         graY = graY .* fspecial('gauss', [feature_width, feature_width], 1);
+%         magnitude = magnitude .* fspecial('gauss', [feature_width, feature_width], 1);
         for iind = 1 : size(graX,1)
             for jjnd = 1 : size(graX,2)
-                
-                features{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins{iind, jjnd}) = features{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins{iind, jjnd}) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+                features{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins{iind, jjnd}) = features{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins{iind, jjnd}) + magnitude(iind, jjnd);
             end
         end
 %         if (ceil(iind / 4) - 1 > 0)
