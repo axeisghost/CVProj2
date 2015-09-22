@@ -53,67 +53,67 @@ function [features] = get_features(image, x, y, feature_width)
 % feature vector to some power that is less than one.
 
 % Placeholder that you can delete. Empty features.
-% features = zeros(size(x,1), 128);
-features = cell(1, size(x,2));
+features = zeros(size(x,2), 128);
+directions = 0: pi/4 : 7*pi/4;
 for ind = 1 : size(x,2)
-    features{ind} = cell(4);
-    for jnd = 1 : 16
-        features{ind}{jnd} = zeros(1,8);
-    end
     for knd = 1 : size(image,3)
         extractor = image(ceil(x(ind) - (feature_width / 2)) : ceil(x(ind) + (feature_width / 2 - 1)), ceil(y(ind) - feature_width / 2) : ceil(y(ind) + feature_width / 2 - 1),knd);
         [graX,graY] = gradient(im2double(extractor));
-%         graX = imfilter(graX, fspecial('gauss', [5 5], 1), 'symmetric');
-%         graY = imfilter(graY, fspecial('gauss', [5 5], 1), 'symmetric');
+        localDir = atan2(graY, graX);
+        graX = imfilter(graX, fspecial('gauss', [5 5], 1), 'symmetric');
+        graY = imfilter(graY, fspecial('gauss', [5 5], 1), 'symmetric');
         magnitude = sqrt(graX .* graX + graY .* graY);
-        setupbins = cell(feature_width);
+        magnitude = magnitude .* fspecial('gauss', [feature_width, feature_width], feature_width / 2);
         for iind = 1 : size(graX, 1)
             for jjnd = 1 : size(graX, 2)
-                if (abs(graX(iind, jjnd)) > abs(graY(iind, jjnd)))
-                    if (graX(iind, jjnd) > 0 && graY(iind, jjnd) > 0)
-                        setupbins{iind, jjnd} = [1 2];
-                    end
-                    if (graX(iind, jjnd) > 0 && graY(iind, jjnd) < 0)
-                        setupbins{iind, jjnd} = [1 8];
-                    end
-                    if (graX(iind, jjnd) < 0 && graY(iind, jjnd) > 0)
-                        setupbins{iind, jjnd} = [4 5];
-                    end
-                    if (graX(iind, jjnd) < 0 && graY(iind, jjnd) < 0)
-                        setupbins{iind, jjnd} = [5 6];
-                    end
-                    if (graX(iind, jjnd) == 0 && graY(iind, jjnd) == 0)
-                        setupbins{iind, jjnd} = [5 6];
-                    end
-                    if (graX(iind, jjnd) < 0 && graY(iind, jjnd) == 0)
-                        setupbins{iind, jjnd} = [5];
-                    end
-                    if (graX(iind, jjnd) > 0 && graY(iind, jjnd) == 0)
-                        setupbins{iind, jjnd} = [1];
-                    end
-                else
-                    if (graX(iind, jjnd) >= 0 && graY(iind, jjnd) >= 0)
-                        setupbins{iind, jjnd} = [2 3];
-                    end
-                    if (graX(iind, jjnd) > 0 && graY(iind, jjnd) < 0)
-                        setupbins{iind, jjnd} = [7 8];
-                    end
-                    if (graX(iind, jjnd) < 0 && graY(iind, jjnd) > 0)
-                        setupbins{iind, jjnd} = [3 4];
-                    end
-                    if (graX(iind, jjnd) < 0 && graY(iind, jjnd) < 0)
-                        setupbins{iind, jjnd} = [6 7];
-                    end
-                    if (graX(iind, jjnd) == 0 && graY(iind, jjnd) == 0)
-                        setupbins{iind, jjnd} = [5 6];
-                    end
-                    if (graY(iind, jjnd) < 0 && graX(iind, jjnd) == 0)
-                        setupbins{iind, jjnd} = [7];
-                    end
-                    if (graY(iind, jjnd) > 0 && graX(iind, jjnd) == 0)
-                        setupbins{iind, jjnd} = [3];
-                    end
+                for kknd = 1 : 8
+                    features(ind, ((ceil(iind / (feature_width / 4)) - 1)  * 4 + (ceil(jjnd / (feature_width / 4)) - 1)) * 8 + kknd) = features(ind, ((ceil(iind / (feature_width / 4)) - 1) * 4 + (ceil(jjnd / (feature_width / 4)) - 1)) * 8 + kknd) + magnitude(iind, jjnd) .* cos(localDir(iind,jjnd) - directions(kknd));
                 end
+%                 if (abs(graX(iind, jjnd)) > abs(graY(iind, jjnd)))
+%                     if (graX(iind, jjnd) > 0 && graY(iind, jjnd) > 0)
+%                         setupbins{iind, jjnd} = [1 2];
+%                     end
+%                     if (graX(iind, jjnd) > 0 && graY(iind, jjnd) < 0)
+%                         setupbins{iind, jjnd} = [1 8];
+%                     end
+%                     if (graX(iind, jjnd) < 0 && graY(iind, jjnd) > 0)
+%                         setupbins{iind, jjnd} = [4 5];
+%                     end
+%                     if (graX(iind, jjnd) < 0 && graY(iind, jjnd) < 0)
+%                         setupbins{iind, jjnd} = [5 6];
+%                     end
+%                     if (graX(iind, jjnd) == 0 && graY(iind, jjnd) == 0)
+%                         setupbins{iind, jjnd} = [5 6];
+%                     end
+%                     if (graX(iind, jjnd) < 0 && graY(iind, jjnd) == 0)
+%                         setupbins{iind, jjnd} = [5];
+%                     end
+%                     if (graX(iind, jjnd) > 0 && graY(iind, jjnd) == 0)
+%                         setupbins{iind, jjnd} = [1];
+%                     end
+%                 else
+%                     if (graX(iind, jjnd) >= 0 && graY(iind, jjnd) >= 0)
+%                         setupbins{iind, jjnd} = [2 3];
+%                     end
+%                     if (graX(iind, jjnd) > 0 && graY(iind, jjnd) < 0)
+%                         setupbins{iind, jjnd} = [7 8];
+%                     end
+%                     if (graX(iind, jjnd) < 0 && graY(iind, jjnd) > 0)
+%                         setupbins{iind, jjnd} = [3 4];
+%                     end
+%                     if (graX(iind, jjnd) < 0 && graY(iind, jjnd) < 0)
+%                         setupbins{iind, jjnd} = [6 7];
+%                     end
+%                     if (graX(iind, jjnd) == 0 && graY(iind, jjnd) == 0)
+%                         setupbins{iind, jjnd} = [5 6];
+%                     end
+%                     if (graY(iind, jjnd) < 0 && graX(iind, jjnd) == 0)
+%                         setupbins{iind, jjnd} = [7];
+%                     end
+%                     if (graY(iind, jjnd) > 0 && graX(iind, jjnd) == 0)
+%                         setupbins{iind, jjnd} = [3];
+%                     end
+%                 end
             end
         end
 %         graX = imfilter(graX, fspecial('gauss', [5 5], 1));
@@ -121,11 +121,11 @@ for ind = 1 : size(x,2)
 %         graX = graX .* fspecial('gauss', [feature_width, feature_width], 1);
 %         graY = graY .* fspecial('gauss', [feature_width, feature_width], 1);
 %         magnitude = magnitude .* fspecial('gauss', [feature_width, feature_width], 1);
-        for iind = 1 : size(graX,1)
-            for jjnd = 1 : size(graX,2)
-                features{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins{iind, jjnd}) = features{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins{iind, jjnd}) + magnitude(iind, jjnd);
-            end
-        end
+%         for iind = 1 : size(graX,1)
+%             for jjnd = 1 : size(graX,2)
+%                 features{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins{iind, jjnd}) = features{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins{iind, jjnd}) + magnitude(iind, jjnd);
+%             end
+%         end
 %         if (ceil(iind / 4) - 1 > 0)
 %                     features{ind}{ceil(iind / 4 - 1), ceil(jjnd / 4)}(setupbins) = features{ind}{ceil(iind / 4 - 1), ceil(jjnd / 4)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
 %                 end
@@ -139,13 +139,7 @@ for ind = 1 : size(x,2)
 %                     features{ind}{ceil(iind / 4), ceil(jjnd / 4 - 1)}(setupbins) = features{ind}{ceil(iind / 4), ceil(jjnd / 4 - 1)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
 %                 end
     end
-    normsum = 0;
-    for jnd = 1 : 16
-        normsum = normsum + sum(features{ind}{jnd});
-    end
-    for jnd = 1 : 16
-        features{ind}{jnd} = features{ind}{jnd} ./ normsum;
-    end
+    features(ind,:) = features(ind,:) * (1/norm(features(ind,:), 2));
 end
 
 

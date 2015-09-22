@@ -38,7 +38,7 @@ function [x, y, confidence, scale, orientation] = get_interest_points(image, fea
 
 % Placeholder that you can delete. 20 random points
 alpha = 0.06;
-thershold = 0.0000005;
+thershold = 0.00000001;
 % x = ceil(rand(20,1) * size(image,2));
 % y = ceil(rand(20,1) * size(image,1));
 % image = imgaussfilt(image, 1);

@@ -30,17 +30,14 @@ function [matches, confidences] = match_features(features1, features2)
 % confidences = rand(num_features,1);
 matches = zeros(size(features1, 2), 2);
 confidences = zeros(size(features1, 2), 1);
-for ind = 1 : size(features1, 2)
+for ind = 1 : size(features1, 1)
     mindistance = Inf;
     secmindistance = Inf;
     thirdmindistance = Inf;
     pt1 = 1;
     pt2 = 1;
-    for jnd = 1 : size(features2, 2)
-        distance = 0;
-        for knd = 1 : 16
-            distance = distance + sum((features1{ind}{knd} - features2{jnd}{knd}) .* (features1{ind}{knd} - features2{jnd}{knd}));
-        end
+    for jnd = 1 : size(features2, 1)
+        distance = sum((features1(ind, :) - features2(jnd, :)) .* (features1(ind, :) - features2(jnd, :)));
         if (distance < mindistance)
             pt2 = pt1;
             pt1 = jnd;
