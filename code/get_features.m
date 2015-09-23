@@ -68,8 +68,10 @@ for ind = 1 : size(x,2)
     for knd = 1 : size(image,3)
         graX = wholegraX(ceil(x(ind) - (feature_width / 2)) : ceil(x(ind) + (feature_width / 2 - 1)), ceil(y(ind) - feature_width / 2) : ceil(y(ind) + feature_width / 2 - 1),knd);
         graY = wholegraY(ceil(x(ind) - (feature_width / 2)) : ceil(x(ind) + (feature_width / 2 - 1)), ceil(y(ind) - feature_width / 2) : ceil(y(ind) + feature_width / 2 - 1),knd);
-        graX = graX .* blurer;
-        graY = graY .* blurer;
+        magnitude = sqrt(graX .* graX + graY .* graY);
+%         magnitude = magnitude .* blurer;
+%         graX = graX .* blurer;
+%         graY = graY .* blurer;
         setupbins = [0 0];
         for iind = 1 : size(graX, 1)
             for jjnd = 1 : size(graX, 2)
@@ -118,18 +120,18 @@ for ind = 1 : size(x,2)
                         setupbins = [3];
                     end
                 end
-                tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins) = tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+                tempfeatures{ind}{ceil(iind / (feature_width / 4)), ceil(jjnd / (feature_width / 4))}(setupbins) = tempfeatures{ind}{ceil(iind / (feature_width / 4)), ceil(jjnd / (feature_width / 4))}(setupbins) + magnitude(iind, jjnd);
 %                 if (ceil(iind / 4) - 1 > 0)
-%                     tempfeatures{ind}{ceil(iind / 4 - 1), ceil(jjnd / 4)}(setupbins) = tempfeatures{ind}{ceil(iind / 4 - 1), ceil(jjnd / 4)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+%                     tempfeatures{ind}{ceil(iind / 4 - 1), ceil(jjnd / 4)}(setupbins) = tempfeatures{ind}{ceil(iind / 4 - 1), ceil(jjnd / 4)}(setupbins) + magnitude(iind, jjnd);
 %                 end
 %                 if (ceil(iind / 4) + 1 < 5)
-%                     tempfeatures{ind}{ceil(iind / 4 + 1), ceil(jjnd / 4)}(setupbins) = tempfeatures{ind}{ceil(iind / 4 + 1), ceil(jjnd / 4)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+%                     tempfeatures{ind}{ceil(iind / 4 + 1), ceil(jjnd / 4)}(setupbins) = tempfeatures{ind}{ceil(iind / 4 + 1), ceil(jjnd / 4)}(setupbins) + magnitude(iind, jjnd);
 %                 end
 %                 if (ceil(jjnd / 4) + 1 < 5)
-%                     tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4) + 1}(setupbins) = tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4) + 1}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+%                     tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4) + 1}(setupbins) = tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4) + 1}(setupbins) + magnitude(iind, jjnd);
 %                 end
 %                 if (ceil(jjnd / 4) - 1 > 0)
-%                     tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4 - 1)}(setupbins) = tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4 - 1)}(setupbins) + abs(graX(iind, jjnd)) + abs(graY(iind, jjnd));
+%                     tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4 - 1)}(setupbins) = tempfeatures{ind}{ceil(iind / 4), ceil(jjnd / 4 - 1)}(setupbins) + magnitude(iind, jjnd);
 %                 end
             end
         end

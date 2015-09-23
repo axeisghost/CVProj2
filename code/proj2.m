@@ -42,9 +42,10 @@ image2 = single(image2)/255;
 %make images smaller to speed up the algorithm. This parameter gets passed
 %into the evaluation code so don't resize the images except by changing
 %this parameter.
-scale_factor = 0.5; 
-image1 = imresize(image1, scale_factor, 'bilinear');
-image2 = imresize(image2, scale_factor, 'bilinear');
+scale_factor1 = 0.5; 
+scale_factor2 = 0.5;
+image1 = imresize(image1, scale_factor1, 'bilinear');
+image2 = imresize(image2, scale_factor2, 'bilinear');
 
 % You don't have to work with grayscale images. Matching with color
 % information might be helpful.
@@ -55,13 +56,17 @@ feature_width = 16; %width and height of each local feature, in pixels.
 
 %% Find distinctive points in each image. Szeliski 4.1.1
 % !!! You will need to implement get_interest_points. !!!
-[x1, y1] = get_interest_points(image1_bw, feature_width);
-[x2, y2] = get_interest_points(image2_bw, feature_width);
+% [x1, y1] = get_interest_points(image1_bw, feature_width);
+% [x2, y2] = get_interest_points(image2_bw, ceil(feature_width .* 1.6));
+[x1, y1] = get_interest_points(image1, feature_width);
+[x2, y2] = get_interest_points(image2, feature_width);
 
 %% Create feature vectors at each interest point. Szeliski 4.1.2
 % !!! You will need to implement get_features. !!!
-[image1_features] = get_features(image1_bw, x1, y1, feature_width);
-[image2_features] = get_features(image2_bw, x2, y2, feature_width);
+% [image1_features] = get_features(image1_bw, x1, y1, feature_width);
+% [image2_features] = get_features(image2_bw, x2, y2, ceil(feature_width .* 1.6));
+[image1_features] = get_features(image1, x1, y1, feature_width);
+[image2_features] = get_features(image2, x2, y2, feature_width);
 
 
 %% Match features. Szeliski 4.1.3
@@ -76,15 +81,15 @@ feature_width = 16; %width and height of each local feature, in pixels.
 % There are two visualization functions. You can comment out one of both of
 % them if you prefer.
 num_pts_to_visualize = 100;
-show_correspondence(image1, image2, y1(1,matches(1:num_pts_to_visualize,1)), ...
-                                    x1(1,matches(1:num_pts_to_visualize,1)), ...
-                                    y2(1,matches(1:num_pts_to_visualize,2)), ...
-                                    x2(1,matches(1:num_pts_to_visualize,2)));
-                                 
-show_correspondence2(image1, image2, y1(1,matches(1:num_pts_to_visualize,1)), ...
-                                     x1(1,matches(1:num_pts_to_visualize,1)), ...
-                                     y2(1,matches(1:num_pts_to_visualize,2)), ...
-                                     x2(1,matches(1:num_pts_to_visualize,2)));
+% show_correspondence(image1, image2, y1(1,matches(1:num_pts_to_visualize,1)), ...
+%                                     x1(1,matches(1:num_pts_to_visualize,1)), ...
+%                                     y2(1,matches(1:num_pts_to_visualize,2)), ...
+%                                     x2(1,matches(1:num_pts_to_visualize,2)));
+%                                  
+% show_correspondence2(image1, image2, y1(1,matches(1:num_pts_to_visualize,1)), ...
+%                                      x1(1,matches(1:num_pts_to_visualize,1)), ...
+%                                      y2(1,matches(1:num_pts_to_visualize,2)), ...
+%                                      x2(1,matches(1:num_pts_to_visualize,2)));
 
 % This evaluation function will only work for the particular Notre Dame
 % image pair specified in the starter code.  Comment out this function if
@@ -94,7 +99,7 @@ show_correspondence2(image1, image2, y1(1,matches(1:num_pts_to_visualize,1)), ..
 % pairs if you want, but it's very tedious. It would be a great service to
 % the class for future years, though!
 num_pts_to_evaluate = 100;
-evaluate_correspondence(image1, image2, eval_file, scale_factor, ... 
+evaluate_correspondence(image1, image2, eval_file, scale_factor1, scale_factor2,... 
                         y1(matches(1:num_pts_to_evaluate,1)), ...
                         x1(matches(1:num_pts_to_evaluate,1)), ...
                         y2(matches(1:num_pts_to_evaluate,2)), ...

@@ -183,30 +183,40 @@ The first one is using sliding window to restrict the local region and to find t
 
 
 <h3>Decision & Tuning</h3>
-<p> 	The tuning of the parameters was all finished with Norte Dame images pair. In the first hand result, the first 100 confident points, the good match rate is not satisfied (72 good match out of 100 match pair). but there are acutally 346 good match pairs points in all the match. Therefore, it is reasonable to improve the evaluation of confidence. Therefore, the third closet point was also included. The ratio was calculated as 
-2 x least distance / (second least distance + third least distance). After the modification, the good match rate of first 100 confident points raised from 72% to 77%</p>
+<p> 	The tuning of the parameters was all finished with Norte Dame images pair. In the first hand result, the first 100 confident points, the good match rate is not satisfied 68 good match out of 100 match pair). To tune the algorithm. the thershold of Non-maxima suppression had been set at 0.0000001. And the alpha value was tuned to 0.05. The gaussian filter used to blur the gradient image was tuned as 0.2 varience. After all the tuning, the matching rate of first 100 points raised from 68 to 88.</p>
 
-<p> 	The algorithm at first can only process grayscale images. The total amount of interested points was limited because it only found points in one layer. At first, the thershold of connect components method was lower to include more point. However, the points we received from this modification did not acutally include useful features. To increase the amount of interested points, the algorithm was modified to calculate colored version of image. All the interested points in three layers of image are all included. Also, in the features extraction, the gradients of all three layers are all included. The calculation was longer but the the match rate increased from 77% to 83%. </p>
+<p> 	The algorithm at first can only process grayscale images. The total amount of interested points was limited because it only found points in one layer. At first, the thershold of connect components method was lower to include more point. However, the points we received from this modification did not acutally include useful features. To increase the amount of interested points, the algorithm was modified to calculate colored version of image. All the interested points in three layers of image are all included. Also, in the features extraction, the gradients of all three layers are all included. The calculation was longer but the the match rate increased from 88% to 94%. </p>
 
 <h3>Result</h3>
 <div style="float: center; padding: 20px">
 <img src="NotreDame_eval_color.jpg" />
 <center><p style="font-size: 14px">Match pairs of Norte Dame images pair</p></center>
 </div>
-<p> The first 100 match pairs was evaluated for the Norte Dame images pair. There are 83 good matches out of 100 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
+<p> The first 100 match pairs was evaluated for the Norte Dame images pair. There are 94 good matches out of 100 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
 
 <div style="float: left; padding: 20px">
 <img src="Mount_RushMore_eval_color_200.jpg" />
 <center><p style="font-size: 14px">Match pairs of Mount Rushmore images pair</p></center>
 </div>
-<p> The first 100 match pairs was evaluated for the Mount Rushmore images pair. There are 92 good matches out of 100 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image.</p>
+<p> Grayscale mode is already good enough for the Mount Rushmore pair, so only the grayscale match result was shown. The first 100 match pairs was evaluated for the Mount Rushmore images pair. There are 99 good matches out of 100 matches. The points with green cricumferen are good matches. The good matches are more concentrated in the left side of the image. The first 500 matches was also examined. There are 467 good matches in the first 500 matches, which is 93.4% good match rate.</p>
 
 <div style="float: left; padding: 20px">
 <img src="eval_color_EpiscopalGaudi.jpg" />
 <center><p style="font-size: 14px">Match pairs of Episcopal Gaudi images pair</p></center>
 </div>
-<p> The first 100 match pairs was evaluated for the Episcopal Gaudi images pair. However, only 16 good matches out of 100 matches. This image pair is more challenging to match for several reasons. First, the wall of Episcopal Gaudi naturally contains a lot of edges and corner. Moreover, their features will be close in SIFT vectors and make the match much harder. Also the different size of two picture will make some corners harder to match. Scaling will make some corners becomes edges. Also, the rotation of Episcopal Gaudi makes the features matching harder with SIFT vectors. Some advanced algorithm can make the interested point fit the scaling and fix the rotation in SIFT vectors but they are not included here.</p>
+<p> The first 100 match pairs was evaluated for the Episcopal Gaudi images pair. However, only 16 good matches out of 100 matches. This image pair is more challenging to match for several reasons. First, the different size of two images will make some corners harder to match. Scaling will make some corners becomes edges. Also, the rotation of Episcopal Gaudi makes the features matching harder with SIFT vectors. Some advanced algorithm can make the interested point.</p>
 
+<p> Here, the larger image was simply resized to match the smaller image, and then the color algorithm was run on the images pair too. For the first 100 matches, the good match raised from 16% to 69%. It is still not satisfied but already improved a lot. Another to improve the result is to set the feature width for the larger image larger according to the ratio of their sizes. The result raised from 16% to 40%. It performed not as good as directly resize the image</p>
+
+<div style="float: left; padding: 20px">
+<img src="eval_color_EpiscopalGaudi_best.jpg" />
+<center><p style="font-size: 14px">Match pairs of Episcopal Gaudi images pair, larger image was resized.</p></center>
+</div>
+
+<div style="float: left; padding: 20px">
+<img src="diffFeatureWeight_eval.jpg" />
+<center><p style="font-size: 14px">Match pairs of Episcopal Gaudi images pair, larger image used larger feature width</p></center>
+</div>
 
 <!-- <h3>Results in a table</h3>
 

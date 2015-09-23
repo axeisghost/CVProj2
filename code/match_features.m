@@ -38,6 +38,7 @@ for ind = 1 : size(features1, 1)
     pt2 = 1;
     for jnd = 1 : size(features2, 1)
         distance = sum((features1(ind, :) - features2(jnd, :)) .* (features1(ind, :) - features2(jnd, :)));
+%         distance = pdist2(features1(ind, :), features2(jnd, :),'minkowski');
         if (distance < mindistance)
             pt2 = pt1;
             pt1 = jnd;
@@ -48,7 +49,7 @@ for ind = 1 : size(features1, 1)
     end
     matches(ind, 1) = ind;
     matches(ind, 2) = pt1;
-    confidences(ind) = 1 / (2.*(sqrt(mindistance) / (sqrt(thirdmindistance) + sqrt(secmindistance))));
+    confidences(ind) = 1 / (sqrt(mindistance) / sqrt(secmindistance));
 end   
 
 

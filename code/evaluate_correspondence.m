@@ -4,16 +4,16 @@
 
 % You do not need to modify anything in this function, although you can if
 % you want to.
-function evaluate_correspondence(imgA, imgB, ground_truth_correspondence_file, scale_factor, x1_est, y1_est, x2_est, y2_est)
+function evaluate_correspondence(imgA, imgB, ground_truth_correspondence_file, scale_factor1, scale_factor2, x1_est, y1_est, x2_est, y2_est)
 
 % ground_truth_correspondence_file = '../data/Notre Dame/921919841_a30df938f2_o_to_4191453057_c86028ce1f_o.mat';
 %  = imread('../data/Notre Dame/921919841_a30df938f2_o.jpg');
 %  = imread('../data/Notre Dame/4191453057_c86028ce1f_o.jpg');
 
-x1_est = x1_est ./ scale_factor;
-y1_est = y1_est ./ scale_factor;
-x2_est = x2_est ./ scale_factor;
-y2_est = y2_est ./ scale_factor;
+x1_est = x1_est ./ scale_factor1;
+y1_est = y1_est ./ scale_factor1;
+x2_est = x2_est ./ scale_factor2;
+y2_est = y2_est ./ scale_factor2;
 
 good_matches = zeros(length(x1_est),1); %indicator vector
 
@@ -69,10 +69,10 @@ for i = 1:length(x1_est)
 
     cur_color = rand(1,3);
 
-    plot(x1_est(i)*scale_factor,y1_est(i)*scale_factor, 'o', 'LineWidth',2, 'MarkerEdgeColor',edgeColor,...
+    plot(x1_est(i)*scale_factor1,y1_est(i)*scale_factor1, 'o', 'LineWidth',2, 'MarkerEdgeColor',edgeColor,...
                        'MarkerFaceColor', cur_color, 'MarkerSize',10)
 
-    plot(x2_est(i)*scale_factor+shiftX,y2_est(i)*scale_factor, 'o', 'LineWidth',2, 'MarkerEdgeColor',edgeColor,...
+    plot(x2_est(i)*scale_factor2+shiftX,y2_est(i)*scale_factor2, 'o', 'LineWidth',2, 'MarkerEdgeColor',edgeColor,...
                        'MarkerFaceColor', cur_color, 'MarkerSize',10)
 end
 hold off;

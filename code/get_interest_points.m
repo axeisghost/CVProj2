@@ -37,13 +37,13 @@ function [x, y, confidence, scale, orientation] = get_interest_points(image, fea
 % of cornerness.
 
 % Placeholder that you can delete. 20 random points
-alpha = 0.06;
+alpha = 0.047;
 thershold = 0.0000001;
 % x = ceil(rand(20,1) * size(image,2));
 % y = ceil(rand(20,1) * size(image,1));
 % image = imgaussfilt(image, 1);
-gaussianD = fspecial('gauss', [6, 6], 1);
-lgaussianD = fspecial('gauss', [8, 8], 1);
+gaussianD = fspecial('gauss', [5, 5], 1);
+lgaussianD = fspecial('gauss', [8, 8], 0.1);
 [gaussianDx, gaussianDy]  = gradient(gaussianD);
 [height, width, channels] = size(image);
 Ix = zeros(height, width, channels);
@@ -57,8 +57,12 @@ for ind = 1 : channels
     gIx2(:,:,ind) = imfilter(Ix(:,:,ind) .* Ix(:,:,ind), lgaussianD);
     gIy2(:,:,ind) = imfilter(Iy(:,:,ind) .* Iy(:,:,ind), lgaussianD);
     gIxIy(:,:,ind) = imfilter(Ix(:,:,ind) .* Iy(:,:,ind), lgaussianD);
+%     gIx2(:,:,ind) = Ix(:,:,ind) .* Ix(:,:,ind);
+%     gIy2(:,:,ind) = Iy(:,:,ind) .* Iy(:,:,ind);
+%     gIxIy(:,:,ind) = Ix(:,:,ind) .* Iy(:,:,ind);
 end
 harR = gIx2 .* gIy2 - gIxIy .* gIxIy - alpha .* (gIx2 + gIy2) .* (gIx2 + gIy2);
+% harR = abs(harR);
 thersholdMask = harR > thershold;
 trylist = [];
 for knd = 1 : channels
@@ -89,9 +93,9 @@ y(delMask) = [];
 for ind = 1 : size(x,2)
     mypoints(x(ind), y(ind)) = 1;
 end
-% image_pts(:,:,1) = image(:,:,1) + mypoints;
-% image_pts(:,:,2) = image(:,:,2) + mypoints;
-% image_pts(:,:,3) = image(:,:,3) + mypoints;
+% for ind = 1 : channels
+%     image_pts(:, :, ind) = image(:, :, ind) + mypoints;
+% end
 % imshow(image_pts);
 end
 

@@ -1,7 +1,18 @@
 All the codes are in code directory. 
-proj2.m was modified a little bit to fix the reverse x and y vector. 
+	1. proj2.m was modified a little bit to fix the reverse x and y vector. 
+	2. proj2.m was modified to use different scale rate for Episcopal Gaudi image pairs.
+	3. evaluate_correspondence,. was modified respectly.
 Some results are stored in the code direactory but not shown in the web-publish result.
-Nearest Neighbor Ratio Test was modified to include third nearest point.
 The algorithm can be run with grayscale and color images but will take much longer to process with color image because the amount of interested points are almost three times and each feature will take three time to calculate.
+
+To run grayscale version of matching:
+	-Change the input variable of get_interested_point, get_features to image1_bw and image2_bw.
+To run color version of matching:
+	-Change the input variable of get_interested_point, get_features to image1 and image2.
+To run resized Episcopal Gaudi matching pair:
+	-Change the scale_factor2 to 0.3.
+To run different feature width match for Episcopal Gaudi pair:
+	-Comment out the original line of get interested points and get features.
+	-Uncomment the line with ceil(feature .* 1.6).
 
 Thank you.
